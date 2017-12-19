@@ -256,8 +256,16 @@ def evaluation(data_loader, model, mode = 'novel'):
             #each prediction for each batch member
             #print(output[0]) 
         else:
-            seq, last = model(data, hidden) #should be [torch.FloatTensor of size batch * 1 * 3]
-            output = np.argmax(last.data.numpy(),axis = 1)
+            ori_output = model(data, hidden) #should be [torch.FloatTensor of size seq*batch*2]
+            #print(ori_output)
+            length, batch_sz = data.size()[1], data.size()[0]
+            #print(length, batch_sz)
+            output = [np.argmax(ori_output[length*i + time_list[i] - 1].data.numpy()) for i in range(batch_sz)]
+            #print(output)
+            #for i in range(batch_sz):
+                #print(i)
+                #np.argmax(ori_output[length*i + time_list[i] - 1].data.numpy())
+            #output = np.argmax(last.data.numpy(),axis = 1)
             #print(output)
         #now get a list of hidden and a list of outputs
         #print(output)
